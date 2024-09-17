@@ -1,8 +1,16 @@
-let fsm_state = 0
-let list_icon = [IconNames.Meh, IconNames.No, IconNames.Pitchfork, IconNames.QuarterNote, IconNames.Rabbit, IconNames.Rollerskate, IconNames.Sad, IconNames.Scissors, IconNames.Silly, IconNames.Skull, IconNames.SmallDiamond, IconNames.SmallHeart, IconNames.SmallSquare, IconNames.Snake, IconNames.Square, IconNames.StickFigure, IconNames.Surprised, IconNames.Sword, IconNames.TShirt, IconNames.Target, IconNames.Tortoise, IconNames.Triangle, IconNames.Umbrella, IconNames.Yes]
-basic.forever(function on_forever() {
-    for (let i of list_icon) {
-        basic.showIcon(i)
-    }
+input.onGesture(Gesture.LogoUp, function () {
+    radio.sendNumber(2)
 })
-console.log(IconNames.Tortoise)
+input.onGesture(Gesture.TiltLeft, function () {
+    radio.sendNumber(0)
+})
+input.onGesture(Gesture.TiltRight, function () {
+    radio.sendNumber(1)
+})
+input.onGesture(Gesture.LogoDown, function () {
+    radio.sendNumber(3)
+})
+radio.setGroup(5)
+basic.forever(function () {
+    basic.showString("Sender")
+})
