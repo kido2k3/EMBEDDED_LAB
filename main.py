@@ -1,34 +1,18 @@
+dataX = 0
+dataY = 0
+dataZ = 0
 
-fsm_state = 0
+def on_gesture_tilt_left():
+    basic.show_arrow(ArrowNames.WEST)
+input.on_gesture(Gesture.TILT_LEFT, on_gesture_tilt_left)
 
-list_icon = [
-    IconNames.MEH, 
-    IconNames.NO, 
-    IconNames.PITCHFORK, 
-    IconNames.QUARTER_NOTE,
-    IconNames.RABBIT,
-    IconNames.ROLLERSKATE,
-    IconNames.SAD,
-    IconNames.SCISSORS,
-    IconNames.SILLY,
-    IconNames.SKULL,
-    IconNames.SMALL_DIAMOND,
-    IconNames.SMALL_HEART,
-    IconNames.SMALL_SQUARE,
-    IconNames.SNAKE,
-    IconNames.SQUARE,
-    IconNames.STICK_FIGURE,
-    IconNames.SURPRISED,
-    IconNames.SWORD,
-    IconNames.TSHIRT,
-    IconNames.TARGET,
-    IconNames.TORTOISE,
-    IconNames.TRIANGLE,
-    IconNames.UMBRELLA,
-    IconNames.YES
-    ]
+def on_gesture_tilt_right():
+    basic.show_arrow(ArrowNames.EAST)
+input.on_gesture(Gesture.TILT_RIGHT, on_gesture_tilt_right)
+
 def on_forever():
-    for i in list_icon:
-        basic.show_icon(i)
+    global dataX, dataY, dataZ
+    dataX = input.acceleration(Dimension.X)
+    dataY = input.acceleration(Dimension.Y)
+    dataZ = input.acceleration(Dimension.Z)
 basic.forever(on_forever)
-print(IconNames.TORTOISE)

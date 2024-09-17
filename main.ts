@@ -1,8 +1,15 @@
-let fsm_state = 0
-let list_icon = [IconNames.Meh, IconNames.No, IconNames.Pitchfork, IconNames.QuarterNote, IconNames.Rabbit, IconNames.Rollerskate, IconNames.Sad, IconNames.Scissors, IconNames.Silly, IconNames.Skull, IconNames.SmallDiamond, IconNames.SmallHeart, IconNames.SmallSquare, IconNames.Snake, IconNames.Square, IconNames.StickFigure, IconNames.Surprised, IconNames.Sword, IconNames.TShirt, IconNames.Target, IconNames.Tortoise, IconNames.Triangle, IconNames.Umbrella, IconNames.Yes]
-basic.forever(function on_forever() {
-    for (let i of list_icon) {
-        basic.showIcon(i)
-    }
+let dataX = 0
+let dataY = 0
+let dataZ = 0
+input.onGesture(Gesture.TiltLeft, function on_gesture_tilt_left() {
+    basic.showArrow(ArrowNames.West)
 })
-console.log(IconNames.Tortoise)
+input.onGesture(Gesture.TiltRight, function on_gesture_tilt_right() {
+    basic.showArrow(ArrowNames.East)
+})
+basic.forever(function on_forever() {
+    
+    dataX = input.acceleration(Dimension.X)
+    dataY = input.acceleration(Dimension.Y)
+    dataZ = input.acceleration(Dimension.Z)
+})
