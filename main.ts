@@ -1,8 +1,189 @@
-let fsm_state = 0
-let list_icon = [IconNames.Meh, IconNames.No, IconNames.Pitchfork, IconNames.QuarterNote, IconNames.Rabbit, IconNames.Rollerskate, IconNames.Sad, IconNames.Scissors, IconNames.Silly, IconNames.Skull, IconNames.SmallDiamond, IconNames.SmallHeart, IconNames.SmallSquare, IconNames.Snake, IconNames.Square, IconNames.StickFigure, IconNames.Surprised, IconNames.Sword, IconNames.TShirt, IconNames.Target, IconNames.Tortoise, IconNames.Triangle, IconNames.Umbrella, IconNames.Yes]
-basic.forever(function on_forever() {
-    for (let i of list_icon) {
-        basic.showIcon(i)
+function display_lArrow(framenum: any) {
+    if (framenum == 0) {
+        basic.showLeds(`
+            .....
+            .....
+            ....#
+            .....
+            .....
+            `, 1)
+    } else if (framenum == 1) {
+        basic.showLeds(`
+            .....
+            ....#
+            ...##
+            ....#
+            .....
+            `, 1)
+    } else if (framenum == 2) {
+        basic.showLeds(`
+            ....#
+            ...#.
+            ..###
+            ...#.
+            ....#
+            `, 1)
+    } else if (framenum == 3) {
+        basic.showLeds(`
+            ...#.
+            ..#..
+            .####
+            ..#..
+            ...#.
+            `, 1)
+    } else if (framenum == 4) {
+        basic.showLeds(`
+            ..#..
+            .#...
+            #####
+            .#...
+            ..#..
+            `, 1)
+    } else if (framenum == 5) {
+        basic.showLeds(`
+            .#...
+            #....
+            ####.
+            #....
+            .#...
+            `, 1)
+    } else if (framenum == 6) {
+        basic.showLeds(`
+            #....
+            .....
+            ###..
+            .....
+            #....
+            `, 1)
+    } else if (framenum == 7) {
+        basic.showLeds(`
+            .....
+            .....
+            ##...
+            .....
+            .....
+            `, 1)
+    } else if (framenum == 8) {
+        basic.showLeds(`
+            .....
+            .....
+            #....
+            .....
+            .....
+            `, 1)
     }
+    
+}
+
+function display_rArrow(framenum2: any) {
+    if (framenum2 == 0) {
+        basic.showLeds(`
+            .....
+            .....
+            #....
+            .....
+            .....
+            `, 1)
+    } else if (framenum2 == 1) {
+        basic.showLeds(`
+            .....
+            #....
+            ##...
+            #....
+            .....
+            `, 1)
+    } else if (framenum2 == 2) {
+        basic.showLeds(`
+            #....
+            .#...
+            ###..
+            .#...
+            #....
+            `, 1)
+    } else if (framenum2 == 3) {
+        basic.showLeds(`
+            .#...
+            ..#..
+            ####.
+            ..#..
+            .#...
+            `, 1)
+    } else if (framenum2 == 4) {
+        basic.showLeds(`
+            ..#..
+            ...#.
+            #####
+            ...#.
+            ..#..
+            `, 1)
+    } else if (framenum2 == 5) {
+        basic.showLeds(`
+            ...#.
+            ....#
+            .####
+            ....#
+            ...#.
+            `, 1)
+    } else if (framenum2 == 6) {
+        basic.showLeds(`
+            ....#
+            .....
+            ..###
+            .....
+            ....#
+            `, 1)
+    } else if (framenum2 == 7) {
+        basic.showLeds(`
+            .....
+            .....
+            ...##
+            .....
+            .....
+            `, 1)
+    } else if (framenum2 == 8) {
+        basic.showLeds(`
+            .....
+            .....
+            ....#
+            .....
+            .....
+            `, 1)
+    }
+    
+}
+
+//  0: left arrow
+//  1: right arrow
+let cur_st = 0
+let idx = 0
+let cnt = 0
+input.onGesture(Gesture.TiltLeft, function on_gesture_tilt_left() {
+    
+    cur_st = 0
+    idx = 0
 })
-console.log(IconNames.Tortoise)
+input.onGesture(Gesture.TiltRight, function on_gesture_tilt_right() {
+    
+    cur_st = 1
+    idx = 0
+})
+basic.forever(function on_forever() {
+    
+    if (cur_st == 0) {
+        display_lArrow(idx)
+    } else if (cur_st == 1) {
+        display_rArrow(idx)
+    }
+    
+    cnt = cnt + 1
+    if (cnt == 10) {
+        cnt = 0
+        idx = idx + 1
+        if (idx == 9) {
+            idx = 0
+        }
+        
+    }
+    
+    basic.pause(10)
+})
