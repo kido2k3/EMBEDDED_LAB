@@ -1,174 +1,33 @@
-
-def display_lArrow(framenum: any):
-    if framenum == 0:
-        basic.show_leds("""
-            .....
-            .....
-            ....#
-            .....
-            .....
-            """, 1)
-    elif framenum == 1:
-        basic.show_leds("""
-            .....
-            ....#
-            ...##
-            ....#
-            .....
-            """, 1)
-    elif framenum == 2:
-        basic.show_leds("""
-            ....#
-            ...#.
-            ..###
-            ...#.
-            ....#
-            """, 1)
-    elif framenum == 3:
-        basic.show_leds("""
-            ...#.
-            ..#..
-            .####
-            ..#..
-            ...#.
-            """, 1)
-    elif framenum == 4:
-        basic.show_leds("""
-            ..#..
-            .#...
-            #####
-            .#...
-            ..#..
-            """, 1)
-    elif framenum == 5:
-        basic.show_leds("""
-            .#...
-            #....
-            ####.
-            #....
-            .#...
-            """, 1)
-    elif framenum == 6:
-        basic.show_leds("""
-            #....
-            .....
-            ###..
-            .....
-            #....
-            """, 1)
-    elif framenum == 7:
-        basic.show_leds("""
-            .....
-            .....
-            ##...
-            .....
-            .....
-            """, 1)
-    elif framenum == 8:
-        basic.show_leds("""
-            .....
-            .....
-            #....
-            .....
-            .....
-            """, 1)
-def display_rArrow(framenum2: any):
-    if framenum2 == 0:
-        basic.show_leds("""
-            .....
-            .....
-            #....
-            .....
-            .....
-            """, 1)
-    elif framenum2 == 1:
-        basic.show_leds("""
-            .....
-            #....
-            ##...
-            #....
-            .....
-            """, 1)
-    elif framenum2 == 2:
-        basic.show_leds("""
-            #....
-            .#...
-            ###..
-            .#...
-            #....
-            """, 1)
-    elif framenum2 == 3:
-        basic.show_leds("""
-            .#...
-            ..#..
-            ####.
-            ..#..
-            .#...
-            """, 1)
-    elif framenum2 == 4:
-        basic.show_leds("""
-            ..#..
-            ...#.
-            #####
-            ...#.
-            ..#..
-            """, 1)
-    elif framenum2 == 5:
-        basic.show_leds("""
-            ...#.
-            ....#
-            .####
-            ....#
-            ...#.
-            """, 1)
-    elif framenum2 == 6:
-        basic.show_leds("""
-            ....#
-            .....
-            ..###
-            .....
-            ....#
-            """, 1)
-    elif framenum2 == 7:
-        basic.show_leds("""
-            .....
-            .....
-            ...##
-            .....
-            .....
-            """, 1)
-    elif framenum2 == 8:
-        basic.show_leds("""
-            .....
-            .....
-            ....#
-            .....
-            .....
-            """, 1)
-
-
-# 0: left arrow
-# 1: right arrow
-cur_st = 0
-idx = 0
+def clear_led():
+    for i in range(5):
+        led.unplot(i, 4)
+class boat:
+    x = 2
+    y = 4
+    def show_boat(self):
+        clear_led()
+        led.plot(self.x, self.y)
+    def go_left(self):
+        if self.x > 0:
+            self.x = self.x - 1
+    def go_right(self):
+        if self.x < 4:
+            self.x = self.x + 1
 cnt = 0
+myBoat = boat()
 def on_forever():
-    global cur_st, idx, cnt
-    if cur_st == 0:
-        display_lArrow(idx)
-        if input.button_is_pressed(Button.B):
-            cur_st = 1
-            idx = 0
-    elif cur_st == 1:
-        display_rArrow(idx)
-        if input.button_is_pressed(Button.A):
-            cur_st = 0
-            idx = 0
-    cnt = cnt + 1
-    if cnt == 10:
+    global myBoat, cnt
+    myBoat.show_boat()
+    if input.button_is_pressed(Button.B):
+        cnt = cnt + 1
+    elif input.button_is_pressed(Button.A):
+        cnt = cnt - 1
+    else:
         cnt = 0
-        idx = idx + 1
-        if idx == 9:
-            idx = 0
+    if cnt == 1:
+        myBoat.go_right()
+    
+    if cnt == -1:
+        myBoat.go_left()
     basic.pause(10)
 basic.forever(on_forever)

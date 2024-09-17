@@ -1,188 +1,79 @@
-function display_lArrow(framenum: any) {
-    if (framenum == 0) {
-        basic.showLeds(`
-            .....
-            .....
-            ....#
-            .....
-            .....
-            `, 1)
-    } else if (framenum == 1) {
-        basic.showLeds(`
-            .....
-            ....#
-            ...##
-            ....#
-            .....
-            `, 1)
-    } else if (framenum == 2) {
-        basic.showLeds(`
-            ....#
-            ...#.
-            ..###
-            ...#.
-            ....#
-            `, 1)
-    } else if (framenum == 3) {
-        basic.showLeds(`
-            ...#.
-            ..#..
-            .####
-            ..#..
-            ...#.
-            `, 1)
-    } else if (framenum == 4) {
-        basic.showLeds(`
-            ..#..
-            .#...
-            #####
-            .#...
-            ..#..
-            `, 1)
-    } else if (framenum == 5) {
-        basic.showLeds(`
-            .#...
-            #....
-            ####.
-            #....
-            .#...
-            `, 1)
-    } else if (framenum == 6) {
-        basic.showLeds(`
-            #....
-            .....
-            ###..
-            .....
-            #....
-            `, 1)
-    } else if (framenum == 7) {
-        basic.showLeds(`
-            .....
-            .....
-            ##...
-            .....
-            .....
-            `, 1)
-    } else if (framenum == 8) {
-        basic.showLeds(`
-            .....
-            .....
-            #....
-            .....
-            .....
-            `, 1)
+function clear_led() {
+    for (let i = 0; i < 5; i++) {
+        led.unplot(i, 4)
+    }
+}
+
+class boat {
+    static x: number
+    private ___x_is_set: boolean
+    private ___x: number
+    get x(): number {
+        return this.___x_is_set ? this.___x : boat.x
+    }
+    set x(value: number) {
+        this.___x_is_set = true
+        this.___x = value
+    }
+    
+    static y: number
+    private ___y_is_set: boolean
+    private ___y: number
+    get y(): number {
+        return this.___y_is_set ? this.___y : boat.y
+    }
+    set y(value: number) {
+        this.___y_is_set = true
+        this.___y = value
+    }
+    
+    public static __initboat() {
+        boat.x = 2
+        boat.y = 4
+    }
+    
+    public show_boat() {
+        clear_led()
+        led.plot(this.x, this.y)
+    }
+    
+    public go_left() {
+        if (this.x > 0) {
+            this.x = this.x - 1
+        }
+        
+    }
+    
+    public go_right() {
+        if (this.x < 4) {
+            this.x = this.x + 1
+        }
+        
     }
     
 }
 
-function display_rArrow(framenum2: any) {
-    if (framenum2 == 0) {
-        basic.showLeds(`
-            .....
-            .....
-            #....
-            .....
-            .....
-            `, 1)
-    } else if (framenum2 == 1) {
-        basic.showLeds(`
-            .....
-            #....
-            ##...
-            #....
-            .....
-            `, 1)
-    } else if (framenum2 == 2) {
-        basic.showLeds(`
-            #....
-            .#...
-            ###..
-            .#...
-            #....
-            `, 1)
-    } else if (framenum2 == 3) {
-        basic.showLeds(`
-            .#...
-            ..#..
-            ####.
-            ..#..
-            .#...
-            `, 1)
-    } else if (framenum2 == 4) {
-        basic.showLeds(`
-            ..#..
-            ...#.
-            #####
-            ...#.
-            ..#..
-            `, 1)
-    } else if (framenum2 == 5) {
-        basic.showLeds(`
-            ...#.
-            ....#
-            .####
-            ....#
-            ...#.
-            `, 1)
-    } else if (framenum2 == 6) {
-        basic.showLeds(`
-            ....#
-            .....
-            ..###
-            .....
-            ....#
-            `, 1)
-    } else if (framenum2 == 7) {
-        basic.showLeds(`
-            .....
-            .....
-            ...##
-            .....
-            .....
-            `, 1)
-    } else if (framenum2 == 8) {
-        basic.showLeds(`
-            .....
-            .....
-            ....#
-            .....
-            .....
-            `, 1)
-    }
-    
-}
+boat.__initboat()
 
-//  0: left arrow
-//  1: right arrow
-let cur_st = 0
-let idx = 0
 let cnt = 0
+let myBoat = new boat()
 basic.forever(function on_forever() {
     
-    if (cur_st == 0) {
-        display_lArrow(idx)
-        if (input.buttonIsPressed(Button.B)) {
-            cur_st = 1
-            idx = 0
-        }
-        
-    } else if (cur_st == 1) {
-        display_rArrow(idx)
-        if (input.buttonIsPressed(Button.A)) {
-            cur_st = 0
-            idx = 0
-        }
-        
+    myBoat.show_boat()
+    if (input.buttonIsPressed(Button.B)) {
+        cnt = cnt + 1
+    } else if (input.buttonIsPressed(Button.A)) {
+        cnt = cnt - 1
+    } else {
+        cnt = 0
     }
     
-    cnt = cnt + 1
-    if (cnt == 10) {
-        cnt = 0
-        idx = idx + 1
-        if (idx == 9) {
-            idx = 0
-        }
-        
+    if (cnt == 1) {
+        myBoat.go_right()
+    }
+    
+    if (cnt == -1) {
+        myBoat.go_left()
     }
     
     basic.pause(10)
