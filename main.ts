@@ -1,8 +1,59 @@
-let fsm_state = 0
-let list_icon = [IconNames.Meh, IconNames.No, IconNames.Pitchfork, IconNames.QuarterNote, IconNames.Rabbit, IconNames.Rollerskate, IconNames.Sad, IconNames.Scissors, IconNames.Silly, IconNames.Skull, IconNames.SmallDiamond, IconNames.SmallHeart, IconNames.SmallSquare, IconNames.Snake, IconNames.Square, IconNames.StickFigure, IconNames.Surprised, IconNames.Sword, IconNames.TShirt, IconNames.Target, IconNames.Tortoise, IconNames.Triangle, IconNames.Umbrella, IconNames.Yes]
+let TEM_THRESHOLD = 40
+let LIGHT_THRESHOLD = 200
+radio.setGroup(5)
+let tem_value = 0
+let light_value = 0
+function sample_data() {
+    
+    tem_value = tem_value + input.temperature()
+    light_value = light_value + input.lightLevel()
+}
+
+//  0: sample data
+//  1: handle data and send signal
+let cur_st = 0
+let cnt = 0
 basic.forever(function on_forever() {
-    for (let i of list_icon) {
-        basic.showIcon(i)
+    let tem_avg: number;
+    let light_avg: number;
+    let flag: number;
+    
+    if (cur_st == 0) {
+        sample_data()
+        cnt = cnt + 1
+        if (cnt == 10) {
+            cnt = 0
+            cur_st = 1
+        }
+        
+    } else if (cur_st == 1) {
+        tem_avg = tem_value / 10
+        light_avg = light_value / 10
+        flag = 0
+        if (tem_avg > TEM_THRESHOLD) {
+            //  heat warning
+            console.log(0)
+            radio.sendNumber(0)
+            flag = 1
+        }
+        
+        if (light_avg < LIGHT_THRESHOLD) {
+            //  light warning
+            console.log(1)
+            radio.sendNumber(1)
+            flag = 1
+        }
+        
+        if (flag == 0) {
+            //  normal
+            console.log(2)
+            radio.sendNumber(2)
+        }
+        
+        cur_st = 0
+        tem_value = 0
+        light_value = 0
     }
+    
+    basic.pause(10)
 })
-console.log(IconNames.Tortoise)
