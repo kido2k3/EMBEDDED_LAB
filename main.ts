@@ -1,87 +1,55 @@
+let TEM_THRESHOLD = 40
+let LIGHT_THRESHOLD = 200
 radio.setGroup(5)
-function toggle_led() {
-    for (let i = 0; i < 3; i++) {
-        led.toggle(0, i)
-    }
-    led.toggle(0, 4)
+let tem_value = 0
+let light_value = 0
+function sample_data() {
+    
+    tem_value = tem_value + input.temperature()
+    light_value = light_value + input.lightLevel()
 }
 
-let heat_timer = 0
-let heat_st = 0
-function heat_warning_fsm(cur_st: number) {
+//  0: sample data
+//  1: handle data and send signal
+let cur_st = 0
+let cnt = 0
+basic.forever(function on_forever() {
+    let tem_avg: number;
+    let light_avg: number;
     
     if (cur_st == 0) {
-        for (let i = 0; i < 3; i++) {
-            led.unplot(0, i)
-        }
-        led.unplot(0, 4)
-        heat_timer = 0
-    } else if (cur_st == 1) {
-        heat_timer = heat_timer + 1
-        if (heat_timer == 25) {
-            toggle_led()
-            heat_timer = 0
+        sample_data()
+        cnt = cnt + 1
+        if (cnt == 10) {
+            cnt = 0
+            cur_st = 1
         }
         
-    }
-    
-}
-
-function light_off() {
-    for (let i = 2; i < 5; i++) {
-        for (let j = 2; j < 5; j++) {
-            led.unplot(i, j)
-        }
-    }
-}
-
-function light_on() {
-    for (let i = 2; i < 5; i++) {
-        for (let j = 2; j < 5; j++) {
-            led.plot(i, j)
-        }
-    }
-}
-
-let light_st = 0
-function light_warning_fsm(cur_st: number) {
-    if (cur_st == 0) {
-        light_off()
     } else if (cur_st == 1) {
-        light_on()
+        tem_avg = tem_value / 10
+        light_avg = light_value / 10
+        if (tem_avg > TEM_THRESHOLD) {
+            //  heat warning
+            console.log(0)
+            radio.sendNumber(0)
+        } else {
+            console.log(1)
+            radio.sendNumber(1)
+        }
+        
+        if (light_avg < LIGHT_THRESHOLD) {
+            //  light warning
+            console.log(3)
+            radio.sendNumber(3)
+        } else {
+            console.log(2)
+            radio.sendNumber(2)
+        }
+        
+        cur_st = 0
+        tem_value = 0
+        light_value = 0
     }
     
-}
-
-radio.onReceivedNumber(function on_received_number(receivedNumber: number) {
-    
-    if (receivedNumber == 0) {
-        heat_st = 1
-    } else if (receivedNumber == 1) {
-        heat_st = 0
-    } else if (receivedNumber == 2) {
-        light_st = 0
-    } else if (receivedNumber == 3) {
-        light_st = 1
-    }
-    
-})
-basic.forever(function on_forever() {
-    
-    heat_warning_fsm(heat_st)
-    light_warning_fsm(light_st)
     basic.pause(10)
-})
-//  for demo
-input.onButtonPressed(Button.A, function on_button_pressed_a() {
-    radio.sendNumber(0)
-})
-input.onButtonPressed(Button.B, function on_button_pressed_b() {
-    radio.sendNumber(3)
-})
-input.onButtonPressed(Button.AB, function on_button_pressed_ab() {
-    radio.sendNumber(1)
-})
-input.onLogoEvent(TouchButtonEvent.Pressed, function on_logo_event_pressed() {
-    radio.sendNumber(2)
 })
