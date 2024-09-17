@@ -1,47 +1,71 @@
-TEM_THRESHOLD = 40
-LIGHT_THRESHOLD = 200
+
 radio.set_group(5)
-tem_value = 0
-light_value = 0
 
-def sample_data():
-    global tem_value, light_value
-    tem_value = tem_value + input.temperature()
-    light_value = light_value + input.light_level()
+def toggle_led():
+    for i in range(3):
+        led.toggle(0, i)
+    led.toggle(0, 4)
 
-# 0: sample data
-# 1: handle data and send signal
-cur_st = 0
-cnt = 0
-def on_forever():
-    global cur_st, cnt, tem_value, light_value
+heat_timer = 0
+heat_st = 0
+def heat_warning_fsm(cur_st: int):
+    global heat_timer
     if cur_st == 0:
-        sample_data()
-        cnt = cnt + 1
-        if cnt == 10:
-            cnt = 0
-            cur_st = 1
+        for i in range(3):
+            led.unplot(0, i)
+        led.unplot(0, 4)
+        heat_timer = 0
     elif cur_st == 1:
-        tem_avg = tem_value / 10
-        light_avg = light_value / 10
-        flag = 0
-        if tem_avg > TEM_THRESHOLD:
-            # heat warning
-            print(0)
-            radio.send_number(0)
-            flag = 1
-        if light_avg < LIGHT_THRESHOLD:
-            # light warning
-            print(1)
-            radio.send_number(1)
-            flag = 1
-        if flag == 0:
-            # normal
-            print(2)
-            radio.send_number(2)
-        
-        cur_st = 0
-        tem_value = 0
-        light_value = 0
+        heat_timer = heat_timer + 1
+        if heat_timer == 25:
+            toggle_led()
+            heat_timer = 0
+
+def light_off():
+    for i in range(2, 5):
+        for j in range(2, 5):
+            led.unplot(i, j)
+def light_on():
+    for i in range(2, 5):
+        for j in range(2, 5):
+            led.plot(i, j)
+light_st = 0
+def light_warning_fsm(cur_st: int):
+    if cur_st == 0:
+        light_off() 
+    elif cur_st == 1:
+        light_on()
+def on_received_number(receivedNumber):
+    global heat_st, light_st
+    if receivedNumber == 0:
+        heat_st = 1
+    elif receivedNumber == 1:
+        heat_st = 0
+    elif receivedNumber == 2:
+        light_st = 0
+    elif receivedNumber == 3:
+        light_st = 1
+radio.on_received_number(on_received_number)
+
+def on_forever():
+    global heat_st, light_st
+    heat_warning_fsm(heat_st)
+    light_warning_fsm(light_st)
     basic.pause(10)
 basic.forever(on_forever)
+
+# for demo
+def on_button_pressed_a():
+    radio.send_number(0)
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def on_button_pressed_b():
+    radio.send_number(3)
+input.on_button_pressed(Button.B, on_button_pressed_b)
+def on_button_pressed_ab():
+    radio.send_number(1)
+input.on_button_pressed(Button.AB, on_button_pressed_ab)
+
+def on_logo_event_pressed():
+    radio.send_number(2)
+input.on_logo_event(TouchButtonEvent.PRESSED, on_logo_event_pressed)
