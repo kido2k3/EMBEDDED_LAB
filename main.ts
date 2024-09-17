@@ -1,8 +1,21 @@
-let fsm_state = 0
-let list_icon = [IconNames.Meh, IconNames.No, IconNames.Pitchfork, IconNames.QuarterNote, IconNames.Rabbit, IconNames.Rollerskate, IconNames.Sad, IconNames.Scissors, IconNames.Silly, IconNames.Skull, IconNames.SmallDiamond, IconNames.SmallHeart, IconNames.SmallSquare, IconNames.Snake, IconNames.Square, IconNames.StickFigure, IconNames.Surprised, IconNames.Sword, IconNames.TShirt, IconNames.Target, IconNames.Tortoise, IconNames.Triangle, IconNames.Umbrella, IconNames.Yes]
-basic.forever(function on_forever() {
-    for (let i of list_icon) {
-        basic.showIcon(i)
-    }
+input.onGesture(Gesture.LogoUp, function on_gesture_logo_up() {
+    
+    cur_st = 1
 })
-console.log(IconNames.Tortoise)
+input.onGesture(Gesture.TiltLeft, function on_gesture_tilt_left() {
+    
+    cur_st = 3
+})
+input.onGesture(Gesture.TiltRight, function on_gesture_tilt_right() {
+    
+    cur_st = 4
+})
+input.onGesture(Gesture.LogoDown, function on_gesture_logo_down() {
+    
+    cur_st = 2
+})
+let cur_st = 0
+cur_st = 1
+basic.forever(function on_forever() {
+    basic.showNumber(cur_st)
+})
