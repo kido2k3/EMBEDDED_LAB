@@ -1,8 +1,34 @@
-let fsm_state = 0
-let list_icon = [IconNames.Meh, IconNames.No, IconNames.Pitchfork, IconNames.QuarterNote, IconNames.Rabbit, IconNames.Rollerskate, IconNames.Sad, IconNames.Scissors, IconNames.Silly, IconNames.Skull, IconNames.SmallDiamond, IconNames.SmallHeart, IconNames.SmallSquare, IconNames.Snake, IconNames.Square, IconNames.StickFigure, IconNames.Surprised, IconNames.Sword, IconNames.TShirt, IconNames.Target, IconNames.Tortoise, IconNames.Triangle, IconNames.Umbrella, IconNames.Yes]
-basic.forever(function on_forever() {
-    for (let i of list_icon) {
-        basic.showIcon(i)
+let data = 0
+function sample_data() {
+    
+    data = data + input.compassHeading()
+}
+
+function display_arrow(value: number) {
+    if (value < 45) {
+        basic.showArrow(ArrowNames.North, 1)
+    } else if (value < 135) {
+        basic.showArrow(ArrowNames.West, 1)
+    } else if (value < 225) {
+        basic.showArrow(ArrowNames.South, 1)
+    } else if (value < 315) {
+        basic.showArrow(ArrowNames.East, 1)
+    } else if (value < 359) {
+        basic.showArrow(ArrowNames.North, 1)
     }
+    
+}
+
+let cnt = 0
+basic.forever(function on_forever() {
+    
+    sample_data()
+    cnt = cnt + 1
+    if (cnt == 10) {
+        cnt = 0
+        display_arrow(data / 10)
+        data = 0
+    }
+    
+    basic.pause(10)
 })
-console.log(IconNames.Tortoise)

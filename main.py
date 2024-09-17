@@ -1,34 +1,29 @@
+data = 0
+def sample_data():
+    global data
+    data = data + input.compass_heading()
 
-fsm_state = 0
+def display_arrow(value: float):
+    if value < 45:
+        basic.show_arrow(ArrowNames.NORTH, 1)
+    elif value < 135:
+        basic.show_arrow(ArrowNames.WEST, 1)
+    elif value < 225:
+        basic.show_arrow(ArrowNames.SOUTH, 1)
+    elif value < 315:
+        basic.show_arrow(ArrowNames.EAST, 1)
+    elif value < 359:
+        basic.show_arrow(ArrowNames.NORTH, 1)
 
-list_icon = [
-    IconNames.MEH, 
-    IconNames.NO, 
-    IconNames.PITCHFORK, 
-    IconNames.QUARTER_NOTE,
-    IconNames.RABBIT,
-    IconNames.ROLLERSKATE,
-    IconNames.SAD,
-    IconNames.SCISSORS,
-    IconNames.SILLY,
-    IconNames.SKULL,
-    IconNames.SMALL_DIAMOND,
-    IconNames.SMALL_HEART,
-    IconNames.SMALL_SQUARE,
-    IconNames.SNAKE,
-    IconNames.SQUARE,
-    IconNames.STICK_FIGURE,
-    IconNames.SURPRISED,
-    IconNames.SWORD,
-    IconNames.TSHIRT,
-    IconNames.TARGET,
-    IconNames.TORTOISE,
-    IconNames.TRIANGLE,
-    IconNames.UMBRELLA,
-    IconNames.YES
-    ]
+
+cnt = 0
 def on_forever():
-    for i in list_icon:
-        basic.show_icon(i)
+    global data, cnt
+    sample_data()
+    cnt = cnt + 1
+    if cnt == 10:
+        cnt = 0
+        display_arrow(data / 10)
+        data = 0
+    basic.pause(10)
 basic.forever(on_forever)
-print(IconNames.TORTOISE)
