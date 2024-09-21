@@ -17,9 +17,9 @@ def on_forever():
     if flag == 1:
         flag = 0
         if buf == 3:
-            basic.show_arrow(ArrowNames.WEST)
-        elif buf == 2:
             basic.show_arrow(ArrowNames.EAST)
+        elif buf == 2:
+            basic.show_arrow(ArrowNames.WEST)
         elif buf == 4:
             basic.show_arrow(ArrowNames.SOUTH)
         elif buf == 1:

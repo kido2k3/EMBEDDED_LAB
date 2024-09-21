@@ -16,9 +16,9 @@ basic.forever(function on_forever() {
     if (flag == 1) {
         flag = 0
         if (buf == 3) {
-            basic.showArrow(ArrowNames.West)
-        } else if (buf == 2) {
             basic.showArrow(ArrowNames.East)
+        } else if (buf == 2) {
+            basic.showArrow(ArrowNames.West)
         } else if (buf == 4) {
             basic.showArrow(ArrowNames.South)
         } else if (buf == 1) {
