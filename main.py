@@ -21,5 +21,5 @@ input.on_gesture(Gesture.LOGO_DOWN, on_gesture_logo_down)
 cur_st = 1
 
 def on_forever():
-    basic.show_number(cur_st)
+    basic.show_number(cur_st, 1)
 basic.forever(on_forever)
