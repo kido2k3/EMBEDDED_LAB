@@ -18,7 +18,6 @@ def on_gesture_logo_down():
     cur_st = 2
 input.on_gesture(Gesture.LOGO_DOWN, on_gesture_logo_down)
 
-cur_st = 0
 cur_st = 1
 
 def on_forever():

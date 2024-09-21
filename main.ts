@@ -14,8 +14,7 @@ input.onGesture(Gesture.LogoDown, function on_gesture_logo_down() {
     
     cur_st = 2
 })
-let cur_st = 0
-cur_st = 1
+let cur_st = 1
 basic.forever(function on_forever() {
     basic.showNumber(cur_st)
 })
